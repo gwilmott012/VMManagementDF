@@ -1,0 +1,22 @@
+<h1 id="tableLabel">Azure VM List</h1>
+
+<p *ngIf="!machines"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="machines">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Machine Name</th>
+      <th>State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let machine of machines">
+      <td><input type="checkbox" id="{{ machine.key }}" (change)="ToggleChanged($event)"></td>
+      <td>{{ machine.name }}</td>
+      <td>{{ machine.state }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<button (click)="ToggleState()" class="btn btn-outline-primary" *ngIf="machines">Toggle State of Selected</button>
