@@ -11,44 +11,35 @@ namespace VMManagementDF.Helpers
     {
         private static string AccountURI = "https://vmmanagement-sigr-cosmos-111df5302b.documents.azure.com:443/";
         private static string AccountPK = "pwTpdfnCeP9nOQTqUK61dxhfKszjMN8Bx0mmrhmaTMFQcUEhqL06gZLRlBzsRcz6TUxG5kQwPXOsrHKHnuuzjg==";
+        private static ILogger log;
         private static CosmosClient client;
         private static Container container;
 
-        public CosmosDBRepository(string DatabaseId, string ContainerId)
+        public CosmosDBRepository(string DatabaseId, string ContainerId, ILogger _log)
         {
-            
+            log = _log;
             client = new CosmosClient(AccountURI, AccountPK);
             container = client.GetContainer(DatabaseId, ContainerId);
         }
 
-        public static async Task CreateItemAsync(VMEntity item, PartitionKey partitionKey)
+        public static async Task CreateItemAsync(VMEntity item)
         {
             await container.CreateItemAsync(item);
         }
 
-        public async Task<List<VMEntity>> GetItemsAsync(ILogger log)
+        public async Task<List<VMEntity>> GetItemsAsync()
         {
             var results = new List<VMEntity>();
 
             try
             {
-                log.LogInformation("CosmosDBRepository pos 1");
-
                 var queryDefinition = new QueryDefinition("SELECT c.id, c.env, c.type, c.name, c.vm_id, c.apps, c.Power_State, c.VM_Type FROM c WHERE c.type = 'VM'");
 
-                log.LogInformation("CosmosDBRepository pos 2");
-
                 var query = container.GetItemQueryIterator<VMEntity>(queryDefinition);
-
-                log.LogInformation("CosmosDBRepository pos 3");
-
-
+                
                 while (query.HasMoreResults)
                 {
-                    log.LogInformation("CosmosDBRepository query.HasMoreResults pos 1");
                     var result = await query.ReadNextAsync();
-
-                    log.LogInformation("CosmosDBRepository query.HasMoreResults pos 2");
 
                     results.AddRange(result);
                 }
@@ -61,9 +52,17 @@ namespace VMManagementDF.Helpers
             return results;
         }  
         
-        public static async Task UpdateItemAsync(VMEntity item, string id)
+        public async Task UpdateItemAsync(VMEntity item)
         {
-            await container.ReplaceItemAsync(item, id);
+            try
+            {
+                log.LogInformation($"Updating {item.name}");
+                log.LogInformation("Response: ", await container.ReplaceItemAsync(item, item.id));
+            }
+            catch (System.Exception ex)
+            {
+                log.LogError(ex, $"Error in Function GetItemsAsync. Message: {ex.Message}; InnerException: {ex.InnerException}");
+            } 
         }
     }
 }

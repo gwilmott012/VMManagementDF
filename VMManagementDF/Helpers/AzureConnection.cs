@@ -4,8 +4,6 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Azure.Management.CosmosDB.Fluent;
-using System.Text;
 
 namespace VMManagementDF.Helpers
 {
