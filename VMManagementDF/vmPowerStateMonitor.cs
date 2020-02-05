@@ -25,13 +25,18 @@ namespace VMManagementDF
                                                    "92c95553-455f-4b53-8bcf-e2dfe4dbcb0b",
                                                    "A4LbQRKmqT:2x4Iu/h=yM=pDBuu9VVA1");
 
-                log.LogInformation("Message 1: Got Connections");
+
+                log.LogInformation("Message 1: Got Connections", Repository, Connection);
 
                 // Get Data
                 var CosmosItems = await Repository.GetItemsAsync();
+
+
+                log.LogInformation($"Got {CosmosItems.Count} items from CosmosDB.");
+
                 var AzureMachines = Connection.VirtualMachines;
 
-                log.LogInformation("Message 2: Got Data from DBs");
+                log.LogInformation($"Got {AzureMachines.Count} items from Azure VMs.");
 
                 // Check if any data needs updating
                 var toBeUpdated = CompareItems(CosmosItems, AzureMachines);
