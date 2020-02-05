@@ -40,6 +40,10 @@ namespace VMManagementDF
 
                 // Check if any data needs updating
                 var toBeUpdated = CompareItems(CosmosItems, AzureMachines);
+
+                log.LogInformation($"Got {toBeUpdated.Count} items to be updated.");
+
+
                 if (toBeUpdated.Any())
                 {
                     foreach (var item in toBeUpdated)
