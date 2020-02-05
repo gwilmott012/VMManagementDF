@@ -16,9 +16,6 @@ namespace VMManagementDF
 {
     public static class vmManagementOrchestration
     {
-        private static string vmid;
-        private static AzureConnection connection;
-
         //Funtion 1 - Entrypoint
 
         [FunctionName("vmManagementOrchestration_Run")]

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Management.Compute.Fluent;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,7 +25,7 @@ namespace VMManagementDF.Helpers
 
         public override string ToString()
         {
-            return $"Name: {Name}, State: {State}, Key: {Key}";
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }
 }

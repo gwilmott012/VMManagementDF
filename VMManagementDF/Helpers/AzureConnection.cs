@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Azure.Management.CosmosDB.Fluent;
 using System.Text;
 
 namespace VMManagementDF.Helpers
@@ -65,15 +66,15 @@ namespace VMManagementDF.Helpers
                         switch (items[1].ToLower())
                         {
                             case "running":
-                                Console.WriteLine("Toggling Off");
+                                Console.WriteLine($"Toggling {targetMachine.Name} Off");
                                 targetMachine.Deallocate();
                                 break;
                             case "stopped":
-                                Console.WriteLine("Toggling On");
+                                Console.WriteLine($"Toggling {targetMachine.Name} On");
                                 targetMachine.Start();
                                 break;
                             case "deallocated":
-                                Console.WriteLine("Toggling On");
+                                Console.WriteLine($"Toggling {targetMachine.Name} On");
                                 targetMachine.Start();
                                 break;
                         }
