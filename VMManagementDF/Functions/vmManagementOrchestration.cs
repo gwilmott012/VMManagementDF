@@ -11,6 +11,7 @@ using VMManagementDF.Helpers;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace VMManagementDF
 {
@@ -24,9 +25,12 @@ namespace VMManagementDF
            [OrchestrationClient]DurableOrchestrationClient starter,
            ILogger log)
         {
-            var data = await req.Content.ReadAsAsync<VirtualMachineIds>();
+            log.LogInformation("LOG-MESSAGE: 1. Starting orchestration...");
 
-            log.LogInformation($"LOG-MESSAGE: STARTING data = '{data.ToString()}'.");
+            var jsonStr = await req.Content.ReadAsStringAsync();
+            var data = JsonConvert.DeserializeObject<VirtualMachineIds>(jsonStr);
+
+            log.LogInformation($"LOG-MESSAGE: 3. STARTING data = '{jsonStr.ToString()}'.");
 
             string instanceId = await starter.StartNewAsync("vmManagementOrchestration", data);
 
@@ -46,7 +50,7 @@ namespace VMManagementDF
             VirtualMachineIds virtualMachineIds = context.GetInput<VirtualMachineIds>();
 
             // Fanning out
-            log.LogInformation($"LOG-MESSAGE: ************** Fanning out ********************");
+            log.LogInformation($"LOG-MESSAGE: ************** Fanning out ********************", virtualMachineIds);
 
 
             var parallelActivities = new List<Task<string>>();
@@ -90,7 +94,8 @@ namespace VMManagementDF
             //return Toggle(key);
             var machine = new AzureConnection("11c4bafa-00bb-43f4-a42d-ed6f2663fbaf",
                            "92c95553-455f-4b53-8bcf-e2dfe4dbcb0b",
-                           "A4LbQRKmqT:2x4Iu/h=yM=pDBuu9VVA1").ToggleMachineState(key);
+                           "A4LbQRKmqT:2x4Iu/h=yM=pDBuu9VVA1", 
+                           log).ToggleMachineState(key);
 
             //var machine = new AzureConnection("4bc6eea4-c3ed-4346-84a8-18f6868195ac",
             //                           "9e497778-66dd-4947-828e-720f6595ff69",
@@ -104,6 +109,7 @@ namespace VMManagementDF
     public class VirtualMachineIds
     {
         public List<string> VirtualMachineIdList;
+        public string Action;
 
         public override string ToString()
         {

@@ -1,10 +1,14 @@
 {
-    "IsEncrypted": false,
+  "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "ClientID": "92c95553-455f-4b53-8bcf-e2dfe4dbcb0b",
-    "TenantID": "11c4bafa-00bb-43f4-a42d-ed6f2663fbaf",
-    "ClientSecret": "A4LbQRKmqT:2x4Iu/h=yM=pDBuu9VVA1"
+    "cosmosDBConnectionString": "AccountEndpoint=https://vmmanagement-sigr-cosmos-111df5302b.documents.azure.com:443/;AccountKey=pwTpdfnCeP9nOQTqUK61dxhfKszjMN8Bx0mmrhmaTMFQcUEhqL06gZLRlBzsRcz6TUxG5kQwPXOsrHKHnuuzjg==;",
+    "SignalRConnectionString": "Endpoint=https://msl-sigr-signalr5070d9580d.service.signalr.net;AccessKey=CkxuVFkIM0NkDFjbboOEm8rYFN63XFOWc6i5qYZaFIs=;Version=1.0;",
+    "DatabaseEndpoint": "https://vmmanagement-sigr-cosmos-111df5302b.documents.azure.com:443/",
+    "DatabaseAccountKey": "pwTpdfnCeP9nOQTqUK61dxhfKszjMN8Bx0mmrhmaTMFQcUEhqL06gZLRlBzsRcz6TUxG5kQwPXOsrHKHnuuzjg=="
+  },
+  "Host": {
+    "LocalHttpPort": "7071",
+    "CORS": "http://localhost:3000"
   }
-}

@@ -57,7 +57,7 @@ namespace VMManagementDF.Helpers
             try
             {
                 log.LogInformation($"Updating {item.name} with new PowerState {item.Power_State}");
-                log.LogInformation("Response: ", (await container.ReplaceItemAsync(item, item.id)).ToString());
+                await container.ReplaceItemAsync(item, item.id);
             }
             catch (System.Exception ex)
             {
