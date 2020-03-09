@@ -26,7 +26,7 @@ namespace VMManagementDF
                                                    log);
 
 
-                log.LogInformation("RUN-MESSAGE 1: Got Connections");
+                log.LogInformation("RUN-MESSAGE 1 (AW 0903): Got Connections");
 
                 // Get Data
                 var CosmosItems = await Repository.GetItemsAsync();
@@ -45,10 +45,10 @@ namespace VMManagementDF
                 {
                     log.LogInformation($"RUN-MESSAGE 5: Got {toBeUpdated.Count} items to be updated.");
 
-                    foreach (var item in toBeUpdated)
+                    foreach (var cosmosItem in toBeUpdated)
                     {
                         // Update any data requiring updates
-                        await Repository.UpdateItemAsync(item);
+                        await Repository.UpdateItemAsync(cosmosItem);
                     }
                 }
             }
@@ -66,22 +66,11 @@ namespace VMManagementDF
 
             try
             {
-                //What are the cosmos details?
-                foreach (var item in cosmosItems)
-                {
-                    log.LogInformation($"COMPARE_ITEMS cosmosItems: {item.vm_id},  {item.name}, {item.Power_State}");
-                }
-
-                foreach (var item in azureMachines)
-                {
-                    log.LogInformation($"COMPARE_ITEMS azureMachines: {item.Key},  {item.Name}, {item.State}");
-                }
-
 
                 foreach (var azureVM in azureMachines)
                 {
 
-                    log.LogInformation($"COMPARE_ITEMS 1: vm name {azureVM.Name},  {azureVM.State}, {azureVM.Key}");
+                    //log.LogInformation($"COMPARE_ITEMS 1: vm name {azureVM.Name},  {azureVM.State}, {azureVM.Key}");
 
                     var cosmosVM = cosmosItems.FirstOrDefault(ci => ci.vm_id.ToLower().Equals(azureVM.Key.ToLower()));
 
@@ -89,11 +78,11 @@ namespace VMManagementDF
 
                     if (cosmosVM != null)
                     {
-                        log.LogInformation($"COMPARE_ITEMS 2: vm from CosmosDB name {cosmosVM.name}, {cosmosVM.Power_State}");
+                        //log.LogInformation($"COMPARE_ITEMS 2: vm from CosmosDB name {cosmosVM.name}, {cosmosVM.Power_State}");
 
                         if (cosmosVM.Power_State != azureVM.State)
                         {
-                            log.LogInformation($"COMPARE_ITEMS 3: Update  {cosmosVM.name}, {cosmosVM.Power_State}");
+                            //log.LogInformation($"COMPARE_ITEMS 3: Update  {cosmosVM.name}, {cosmosVM.Power_State}");
 
                             //Set the state of the CosmosVM item to the same as the AzureVM
                             toBeUpdated.Add(new VMEntity
