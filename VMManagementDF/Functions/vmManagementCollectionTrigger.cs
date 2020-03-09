@@ -10,7 +10,7 @@ namespace VMManagementDF
     public static class vmManagementCollectionTrigger
     {
         [FunctionName("vmManagementCollectionTrigger")]
-        public static void Run([CosmosDBTrigger(
+        public static string Run([CosmosDBTrigger(
             databaseName: "VMManagement",
             collectionName: "VM_Power_State",
             ConnectionStringSetting = "cosmosDBConnectionString",
@@ -21,7 +21,11 @@ namespace VMManagementDF
             {
                 log.LogInformation("COSMOSDB-TRIGGER-FUNCTION 1: Documents modified " + input.Count);
                 log.LogInformation("COSMOSDB-TRIGGER-FUNCTION 2: First document Id " + input[0].Id);
+
+                //return input;
             }
+
+            return "Hi from CosmosDB Run Function"
         }
     }
 }
