@@ -15,7 +15,7 @@ namespace VMManagementDF.Functions
     {
         [FunctionName("vmManagementCosmosCollection")]
         public static async Task<string> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
             // Get CosmosDB Connection
@@ -26,7 +26,7 @@ namespace VMManagementDF.Functions
             var CosmosItems = await Repository.GetItemsAsync();
             log.LogInformation("RUN-MESSAGE 2: Got CosmosDB Items", CosmosItems);
 
-            var jsonCosmosItems = JsonConvert.SerializeObject(CosmosItems);
+            var jsonCosmosItems = JsonConvert.SerializeObject(CosmosItems, Formatting.Indented);
 
             return jsonCosmosItems;
         }

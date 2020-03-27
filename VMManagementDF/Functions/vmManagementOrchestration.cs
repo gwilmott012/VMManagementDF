@@ -28,9 +28,10 @@ namespace VMManagementDF
             log.LogInformation("LOG-MESSAGE: 1. Starting orchestration...");
 
             var jsonStr = await req.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<VirtualMachineIds>(jsonStr);
 
-            log.LogInformation($"LOG-MESSAGE: 3. STARTING data = '{jsonStr.ToString()}'.");
+            log.LogInformation($"LOG-MESSAGE: 3. STARTING data = '{jsonStr}'.");
+
+            var data = JsonConvert.DeserializeObject<VirtualMachineIds>(jsonStr);
 
             string instanceId = await starter.StartNewAsync("vmManagementOrchestration", data);
 
@@ -61,7 +62,7 @@ namespace VMManagementDF
                     log.LogInformation($"LOG-MESSAGE: ************** vmid = {vmid}");
 
                     // Start a new activity function and capture the task reference
-                    Task<string> task = context.CallActivityAsync<string>("vmManagementOrchestration_ToggleVM", vmid);
+                    Task<string> task = context.CallActivityAsync<string>("vmManagementOrchestration_ToggleVM", new[] { vmid, virtualMachineIds.Action });
 
                     // Store the task reference for later
                     parallelActivities.Add(task);
@@ -88,13 +89,13 @@ namespace VMManagementDF
         }
 
         [FunctionName("vmManagementOrchestration_ToggleVM")]
-        public static string ToggleVM([ActivityTrigger] string key, ILogger log)
+        public static string ToggleVM([ActivityTrigger] string[] args, ILogger log)
         {
             //return Toggle(key);
             var machine = new AzureConnection("11c4bafa-00bb-43f4-a42d-ed6f2663fbaf",
                            "92c95553-455f-4b53-8bcf-e2dfe4dbcb0b",
                            "A4LbQRKmqT:2x4Iu/h=yM=pDBuu9VVA1",
-                           log).ToggleMachineState(key);
+                           log).ToggleMachineState(args);
 
             //var machine = new AzureConnection("4bc6eea4-c3ed-4346-84a8-18f6868195ac",
             //               "9e497778-66dd-4947-828e-720f6595ff69",
@@ -109,7 +110,7 @@ namespace VMManagementDF
     public class VirtualMachineIds
     {
         public List<string> VirtualMachineIdList;
-        public string Action;
+        public string Action; 
 
         public override string ToString()
         {

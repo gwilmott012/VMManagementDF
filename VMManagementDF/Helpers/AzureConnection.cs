@@ -50,8 +50,11 @@ namespace VMManagementDF.Helpers
             return returnList;
         }
 
-        public string ToggleMachineState(string machineKey)
+        public string ToggleMachineState(string[] args)
         {
+            var machineKey = args[0];
+            var action = args[1];
+            
             try
             {
                 var targetMachineList = azure.VirtualMachines.List();
@@ -64,25 +67,20 @@ namespace VMManagementDF.Helpers
 
                 if (targetMachine != null && !string.IsNullOrEmpty(targetMachine.PowerState.Value))
                 {
-                    var items = targetMachine.PowerState.Value.Split('/');
-
-                    if (items.Length > 0)
+                    switch (action.ToLower())
                     {
-                        switch (items[1].ToLower())
-                        {
-                            case "running":
-                                log.LogInformation($"Toggling {targetMachine.Name} Off");
-                                targetMachine.Deallocate();
-                                break;
-                            case "stopped":
-                                log.LogInformation($"Toggling {targetMachine.Name} On");
-                                targetMachine.Start();
-                                break;
-                            case "deallocated":
-                                log.LogInformation($"Toggling {targetMachine.Name} On");
-                                targetMachine.Start();
-                                break;
-                        }
+                        case "start":
+                            log.LogInformation($"Starting {targetMachine.Name}");
+                            targetMachine.Start();
+                            break;
+                        case "stop":
+                            log.LogInformation($"Stopping {targetMachine.Name}");
+                            targetMachine.Deallocate();
+                            break;
+                        case "restart":
+                            log.LogInformation($"Restarting {targetMachine.Name}");
+                            targetMachine.Restart();
+                            break;
                     }
                 }
 
