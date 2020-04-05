@@ -85,17 +85,7 @@ namespace VMManagementDF
                             //log.LogInformation($"COMPARE_ITEMS 3: Update  {cosmosVM.name}, {cosmosVM.Power_State}");
 
                             //Set the state of the CosmosVM item to the same as the AzureVM
-                            toBeUpdated.Add(new VMEntity
-                            {
-                                apps = cosmosVM.apps,
-                                Environment = cosmosVM.Environment,
-                                id = cosmosVM.id,
-                                name = cosmosVM.name,
-                                Power_State = azureVM.State,
-                                type = cosmosVM.type,
-                                vm_id = cosmosVM.vm_id,
-                                VM_Type = cosmosVM.VM_Type
-                            });
+                            toBeUpdated.Add(new VMEntity(cosmosVM, azureVM.State));
                         }
                     }
                 }

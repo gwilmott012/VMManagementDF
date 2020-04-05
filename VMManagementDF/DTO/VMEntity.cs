@@ -26,6 +26,18 @@ namespace VMManagementDF.DTO
 
         public string VM_Type { get; set; }
 
+        public VMEntity(VMEntity currentVM, string state)
+        {
+            id = currentVM.id;
+            Environment = currentVM.Environment;
+            type = currentVM.type;
+            name = currentVM.name;
+            vm_id = currentVM.vm_id;
+            apps = currentVM.apps;
+            Power_State = state;
+            VM_Type = currentVM.VM_Type;
+        }
+
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
